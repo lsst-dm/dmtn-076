@@ -138,7 +138,7 @@ both Options 2 and 3 slightly simplify the mapping of external URLs to internal 
 However, there are other ways to achieve this end result in Option 1.
 
 Proposal
-^^^^^^^^
+--------
 
 We have chosen Option 1 and thus are imagining URLs of the form:
 
@@ -152,14 +152,29 @@ We have chosen Option 1 and thus are imagining URLs of the form:
 
   - ``https://lsst-pdac.ncsa.illinois.edu/nb/hub``, etc.
 
+Variations for Testing
+^^^^^^^^^^^^^^^^^^^^^^
+
+The relocatability of the configuration of the LSP, if properly implemented, should facilitate the creation of transient instances of the entire LSP for testing purposes (in some cases this might be with supporting services, like Qserv, dummied out).
+
+We also envision permitting parallel test instances of individual Aspects and services to be brought up within a running Aspect.
+That is, it is possible to imagine putting a test instance of Firefly up underneath a ``https://lsst-pdac.ncsa.illinois.edu/portal-test`` URL.
+
+It may be valuable to standardize the ``-test`` convention across Aspects to allow a common switching mechanism to be set up.
+
+It is also possible to imagine a ``-test`` convention applied at the service level, e.g.,
+``https://lsst-pdac.ncsa.illinois.edu/portal/firefly-test``.
+
+
 Instance Naming
 ---------------
 
 At the moment the only explicitly decided Option-1-style *instance_base* is ``lsst-lspdev.ncsa.illinois.edu`` for the pipeline developer LSP instance.
-The PDAC, Science Validation, and Commissioning Cluster names should be decided soon.
 
 The *instance_base* values for the other instances mentioned in the Introduction above are not yet decided.
+The PDAC, Science Validation, and Commissioning Cluster names should be decided soon.
 For the public Data Access Centers, the DNS names to be used will likely depend on the outcome of current deliberations regarding the final name of the Project in the operations era.
+
 
 Aspect-Specific Service Naming
 ------------------------------
