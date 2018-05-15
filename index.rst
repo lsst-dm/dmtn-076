@@ -86,11 +86,94 @@ For example, we wish a user to be able to use ``firefly_client`` or ``afw.displa
 For these reasons, as well as for general considerations of ease of deployment and development, it is highly desirable for these inter-Aspect and intra-Aspect connections to all be "relocatable",
 in the sense that all these connections can be redirected via a single instance-wide configuration parameter.
 
+By default all LSP services will be made available via HTTPS.
+Exceptions may be granted after change-control review including ISO feedback if there are strong performance or other technical grounds for them.
+
 URL Structure
 =============
 
 Alternatives Considered
 -----------------------
+
+With the following substitutions:
+
+*instance_base*
+    Base DNS name for an entire instance of the LSP
+
+*stem*
+    A stem for a hostname component of a URL
+
+*aspect*
+    Aspect name: ``api``, ``portal``, or ``nb``
+
+*service*
+    URL pathname component(s) for Aspect-specific services, e.g., ``tap``, ``firefly``
+
+where *aspect* and *service* are meant to be standardized names across all instances,
+we considered the following alternative URL structures:
+
+#. https://\ *instance_base*\ /\ *aspect*\ /\ *service*, e.g., ``https://data.lsst.org/api/tap``
+#. https://\ *aspect*\ .\ *instance_base*\ /\ *service*, e.g., ``https://api.data.lsst.org/tap``
+#. https://\ *stem*\ -\ *aspect*\ .\ *instance_base*\ /\ *service*, e.g., ``https://data-api.lsst.org/tap``
+
+(The ``data.lsst.org`` URL is purely hypothetical,
+chosen simply to avoid using any existing concrete instance as an example.)
+
+In the context of Option 1, we also briefly considered, and rejected, promoting each API Aspect service to be a peer of the top-level URLs for the other Aspects.
+This would have yielded, e.g., ``https://data.lsst.org/tap`` and ``https://data.lsst.org/sia`` for the various IVOA services provided.
+
+Considerations
+^^^^^^^^^^^^^^
+
+Option 1 requires the least number of DNS names, and corresponding host certificates.
+
+Option 2 would have permitted the use of delegated subdomains for the Science Platform instances,
+as in this case *instance_base* serves as a domain name, not a full hostname.
+Thus, in this model, one could imagine delegated subdomains ``lsst-pdac.ncsa.illinois.edu``, 
+``lsst-sv.ncsa.illinois.edu``, ``lsst-lspdev.ncsa.illinois.edu``,
+with the name resolution handled intra-instance.
+
+By giving each Aspect for each instance its own effective hostname,
+both Options 2 and 3 slightly simplify the mapping of external URLs to internal redirection services such as Kubernetes ingress controllers.
+However, there are other ways to achieve this end result in Option 1.
+
+Proposal
+^^^^^^^^
+
+We have chosen Option 1 and thus are imagining URLs of the form:
+
+- ``https://lsst-pdac.ncsa.illinois.edu/api``
+
+  - ``https://lsst-pdac.ncsa.illinois.edu/api/tap``, ``.../sia``, etc.
+- ``https://lsst-pdac.ncsa.illinois.edu/portal``
+
+  - ``https://lsst-pdac.ncsa.illinois.edu/portal/firefly``, etc.
+- ``https://lsst-pdac.ncsa.illinois.edu/nb``
+
+  - ``https://lsst-pdac.ncsa.illinois.edu/nb/hub``, etc.
+
+Instance Naming
+---------------
+
+At the moment the only explicitly decided Option-1-style *instance_base* is ``lsst-lspdev.ncsa.illinois.edu`` for the pipeline developer LSP instance.
+The PDAC, Science Validation, and Commissioning Cluster names should be decided soon.
+
+The *instance_base* values for the other instances mentioned in the Introduction above are not yet decided.
+For the public Data Access Centers, the DNS names to be used will likely depend on the outcome of current deliberations regarding the final name of the Project in the operations era.
+
+Aspect-Specific Service Naming
+------------------------------
+
+The following subsections, to be written, will set out the basic plans from each aspect for the use of the pathname space below their main entry points.
+
+API Aspect
+^^^^^^^^^^
+
+Portal Aspect
+^^^^^^^^^^^^^
+
+Notebook Aspect
+^^^^^^^^^^^^^^^
 
 .. Add content here.
 .. Do not include the document title (it's automatically added from metadata.yaml).
