@@ -137,6 +137,13 @@ By giving each Aspect for each instance its own effective hostname,
 both Options 2 and 3 slightly simplify the mapping of external URLs to internal redirection services such as Kubernetes ingress controllers.
 However, there are other ways to achieve this end result in Option 1.
 
+Experience with the LSP deployments to date has suggested that it is likely to be very useful to make it easy to set up "pop-up" deployments in addition to the standard instances mentioned above.
+The "relocatability" of instances appears to be simplest to arrange in Option 1,
+where all Aspects share a common URL stem.
+It is next simplest in Option 2, where all Aspects share a common subdomain;
+the benefits of this would be strongest if delegated subdomains were used.
+Option 3 seems the least well suited to this, with no instance-specific common core to the URL, but only a common name-construction pattern.
+
 Proposal
 --------
 
@@ -144,7 +151,7 @@ We have chosen Option 1 and thus are imagining URLs of the form:
 
 - ``https://lsst-pdac.ncsa.illinois.edu/api``
 
-  - ``https://lsst-pdac.ncsa.illinois.edu/api/tap``, ``.../sia``, etc.
+  - ``https://lsst-pdac.ncsa.illinois.edu/api/tap``, ``.../api/sia``, etc.
 - ``https://lsst-pdac.ncsa.illinois.edu/portal``
 
   - ``https://lsst-pdac.ncsa.illinois.edu/portal/firefly``, etc.
