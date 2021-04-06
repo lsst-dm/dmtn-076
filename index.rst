@@ -201,15 +201,15 @@ If we wish to make a minimal change, we could keep all other services where they
 Instance Naming
 ---------------
 
-The existing instance bases, used under Option 1, are:
+The existing instance bases, currently all deployed Option-1-style, are:
 
 - ``lsst-lsp-stable.ncsa.illinois.edu`` - staff developer and Stack Club usage
 - ``lsst-lsp-int.ncsa.illinois.edu`` - integration instance for the NCSA RSP
 - ``data.lsst.cloud`` - IDF production instance, to be used for Data Previews
 - ``data-int.lsst.cloud`` - integration instance for the IDF RSP
 - ``data-dev.lsst.cloud`` - reserved for development work on low-level services
-- NTS: ?
-- Summit: ?
+- ``lsst-nts-k8s.ncsa.illinois.edu`` - NCSA-based test stand for pre-deployment tests for the Summit instance
+- ``summit-lsp.lsst.codes`` - Summit production instance (very limited access)
 - any others?
 
 Note that for the future public Data Access Centers' RSP instances, to be hosted at the USDF, the DNS naming patterns for the instance base hostnames/domains have not yet been determined and involve issues such as the branding of the project that are outside the scope of this note.
