@@ -73,7 +73,7 @@ Each instance has, in addition to the pages/URLs for its Aspects and services, a
 This is the only page which is generally available to users without authentication.
 
 Distinct endpoints are required for each Aspect's services in each instance.
-(There is a possibility that the SV and pipeline developer instances could share some services or even be combined.)
+In some cases, as for IVOA services, the pattern of endpoints for an individual service may be constrained by external standards.
 
 Within an instance, the Aspects need to be able to communicate with each other, and therefore must have knowledge of each other's endpoints within that deployment.
 Even within a single Aspect, there are internal components that need to communicate with each other.
@@ -81,7 +81,7 @@ Even within a single Aspect, there are internal components that need to communic
 User code running in the Notebook Aspect, or in Python plugins in the Portal Aspect,
 or in the envisioned next-to-the-data processing component of the Data Access system,
 also needs to be able to communicate with RSP endpoints.
-Notable use cases include references to API Aspect services from user code in a notebook,
+Notable use cases include references to API Aspect services - e.g., TAP - from user code in a notebook,
 as well as references to Portal Aspect visualization services such as pushing an image to Firefly for display.
 We wish to provide as transparent a user interface for those references as possible,
 ideally providing instance-sensitive defaults.
@@ -96,16 +96,13 @@ does reinforce the user-facing documentation and is preferable, all other things
 
 In addition to the nominal public-facing services of the RSP, the implementation of the RSP uses additional services, some of which are also exposed externally but are not ones we highlight in the description for users of the RSP.
 These also need to be accommodated in any scheme.
-A key example is the central authentication and authorization service.
+A key example is the central authentication and authorization service, which is discussed further below.
 
 By default all RSP services will be made available via HTTPS.
 Exceptions may be granted after change-control review including ISO feedback if there are strong performance or other technical grounds for them.
 
-URL Structure
-=============
-
-Alternatives Considered
------------------------
+URL Structure Alternatives
+==========================
 
 With the following substitutions:
 
@@ -136,8 +133,8 @@ chosen simply to avoid using any existing concrete instance as an example.)
 Note that there are additional options in which the "api" is dropped and the individual API Aspect services are simply promoted to the same level in the hierarchy as ``portal`` and ``nb``.
 We do not discuss those further at this time, as we consider them somewhat less desirable, for the pedagogical reasons mentioned above.
 
-Considerations
-^^^^^^^^^^^^^^
+Evaluation
+----------
 
 Option 1 requires the least number of DNS names (only one per instance), and corresponding host certificates.
 Option 1 also has the simplest recipe for the relocatability of RSP URLs from one instance to another.
@@ -170,9 +167,19 @@ There are therefore only "administrative controls", not "engineering controls", 
 Some of the disadvantages of the Option 4/5 patterns can be mitigated by the provision of standard, common code to enable applications to do the work of reasoning out a partner service's URL endpoint from their own, so that the pattern need only be implemented once.
 However, this would have to be done once per implementation language, certainly at least Python and JavaScript, and quite possibly also Java.
 
+Variations for Testing
+----------------------
+
+The relocatability of the configuration of the RSP, if properly implemented, should facilitate the creation of transient instances of the entire RSP for testing purposes (in some cases this might be with supporting services, like Qserv, dummied out).
+
+We have discussed the notion of permitting parallel test deployments of individual Aspects or even services to be brought up *within a single running instance.*
+The idea discussed was permitting an Aspect name, or a single service name, to be postfixed with, e.g., ``-test``, to allow it to coexist with the standard version on a single instance of the RSP.
+This was not implemented at the time of the initial "PDAC" deployment, and the development of the deployment tooling since then has made it even less desirable.
+The baseline is that all testing of this nature will be done on a full test instance of the RSP, e.g., the integration instances ``lsst-lsp-int`` at NCSA or ``data-int.lsst.cloud`` at the IDF.
+
 
 Usage To Date
--------------
+=============
 
 Option 1 was used for all the initial deployments at NCSA (e.g., ``https://lsst-lsp-stable.ncsa.illinois.edu/(aspect)``), the IDF (e.g., ``https://data.lsst.cloud`), and the Summit.
 The security issues mentioned above were raised before these deployments began and were not considered in the original decision.
@@ -186,64 +193,53 @@ The security argument for changing the existing design and segregating the autho
 
 If we wish to make a minimal change, we could keep all other services where they are, in an Option 1 pattern, and only add a single new hostname per instance, just for the auth service, e.g., ``(hostname)-auth.(domain)``.
 
-Path Forward
-------------
-
-(TBD)
-
-
-Variations for Testing
-^^^^^^^^^^^^^^^^^^^^^^
-
-The relocatability of the configuration of the RSP, if properly implemented, should facilitate the creation of transient instances of the entire LSP for testing purposes (in some cases this might be with supporting services, like Qserv, dummied out).
-
-We have discussed, but generally rejected, the notion of permitting parallel test deployments of individual Aspects or even services to be brought up within a running Aspect.
-The idea discussed was permitting an Aspect name, or a single service name, to be postfixed with, e.g., ``-test``, to allow it to coexist with the standard version on a single instance of the RSP.
-
-So far this has been rejected, and the development of the deployment tooling over the past year has made it even less desirable.
-The baseline is that all testing of this nature will be done on a full test instance of the RSP, e.g., the integration instances ``lsst-lsp-int`` at NCSA or ``data-int.lsst.cloud`` at the IDF.
-
-
 Instance Naming
 ---------------
 
-The existing (i.e., Option 1) instance bases are:
+The existing instance bases, used under Option 1, are:
 
-- ``lsst-lsp-stable.ncsa.illinois.edu``
-- ``lsst-lsp-int.ncsa.illinois.edu``
-- ``data.lsst.cloud``
-- ``data-int.lsst.cloud``
-- ``data-dev.lsst.cloud`` (reserved for development work on low-level services)
+- ``lsst-lsp-stable.ncsa.illinois.edu`` - staff developer and Stack Club usage
+- ``lsst-lsp-int.ncsa.illinois.edu`` - integration instance for the NCSA RSP
+- ``data.lsst.cloud`` - IDF production instance, to be used for Data Previews
+- ``data-int.lsst.cloud`` - integration instance for the IDF RSP
+- ``data-dev.lsst.cloud`` - reserved for development work on low-level services
 - NTS: ?
 - Summit: ?
 - any others?
 
-For the public Data Access Centers, the DNS naming patterns have not yet been determined.
+Note that for the future public Data Access Centers' RSP instances, to be hosted at the USDF, the DNS naming patterns for the instance base hostnames/domains have not yet been determined and involve issues such as the branding of the project that are outside the scope of this note.
 
 
-Aspect-Specific Service Naming
-------------------------------
+Path Forward
+============
 
-The following subsections, to be fleshed out over time, will set out the basic plans from each aspect for the use of the pathname space below their main entry points.
+This is a matter of active discussion.
+The present version of this note is only intended to lay out alternative more explicitly, to facilitate a decision.
+The decision will be recorded here in a later release of this note.
+
+
+Intra-Aspect Service Naming
+===========================
+
+In order to supply additional context, the following subsections, to be fleshed out over time, will set out the basic plans from each Aspect for the use of the pathname space below their main entry points.
 
 API Aspect
-^^^^^^^^^^
+----------
 
 Existing services:
 
 - ``/api/tap`` - IVOA TAP service parent endpoint (e.g., ``/api/tap/async`` for asynchronous queries)
 - ``/api/obstap`` - independent, experimental ObsTAP service
 
-
 Portal Aspect
-^^^^^^^^^^^^^
+-------------
 
 - ``/portal`` - reserved for future use as a user-friendly welcome page, with documentation and referring the user to a variety of possible starting points for using the Portal application
 - ``/portal/app`` - the actual Portal React Web application, on RSP instances having functional TAP and other IVOA services
 - ``/portal/firefly`` - the "vanilla Firefly" application, used on limited-functionality RSP instances having no data services of their own
 
 Notebook Aspect
-^^^^^^^^^^^^^^^
+---------------
 
 - ``/nb`` - main landing page for the Notebook Aspect
 - ``/nb/hub`` and descendents - JupyterHub components associated with the startup and lifetime control of a user session
