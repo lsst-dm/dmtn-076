@@ -1,7 +1,7 @@
 .. image:: https://img.shields.io/badge/dmtn--076-lsst.io-brightgreen.svg
    :target: https://dmtn-076.lsst.io
-.. image:: https://travis-ci.org/lsst-dm/dmtn-076.svg
-   :target: https://travis-ci.org/lsst-dm/dmtn-076
+.. image:: https://github.com/lsst-dm/dmtn-076/workflows/CI/badge.svg
+   :target: https://github.com/lsst-dm/dmtn-076/actions/
 ..
   Uncomment this section and modify the DOI strings to include a Zenodo DOI badge in the README
   .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.#####.svg
@@ -21,7 +21,7 @@ Design note on the possibilities for the Internet-facing endpoints of the LSST S
 - Publication URL: https://dmtn-076.lsst.io
 - Alternative editions: https://dmtn-076.lsst.io/v
 - GitHub repository: https://github.com/lsst-dm/dmtn-076
-- Build system: https://travis-ci.org/lsst-dm/dmtn-076
+- Build system: https://github.com/lsst-dm/dmtn-076/actions/
 
 
 Build this technical note
@@ -78,7 +78,7 @@ Copyright 2018 California Institute of Technology
 This work is licensed under the Creative Commons Attribution 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by/4.0/.
 
 .. _Sphinx: http://sphinx-doc.org
-.. _DM reStructuredText Style Guide: https://developer.lsst.io/docs/rst_styleguide.html
+.. _DM reStructuredText Style Guide: https://developer.lsst.io/restructuredtext/style.html
 .. _this repo: ./index.rst
 .. _Conda: http://conda.pydata.org/docs/
 .. _lsst-texmf: https://lsst-texmf.lsst.io
